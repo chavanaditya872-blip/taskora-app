@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile · Taskora</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body class="app-page">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-mark">T</span> Taskora</div>
+    <nav class="side-nav">
+      <a href="dashboard.html">📊 Dashboard</a>
+      <a href="task.html">➕ New Task</a>
+      <a href="profile.html" class="active">👤 Profile</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-mini">
+        <div class="avatar" id="userAvatar">U</div>
+        <div>
+          <div id="userNameSide" class="user-name">User</div>
+          <div id="userEmailSide" class="muted small">-</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <button class="hamburger" id="menuToggle">☰</button>
+      <h1>My Profile</h1>
+      <a href="dashboard.html" class="btn btn-ghost">← Back</a>
+    </header>
+
+    <section class="profile-grid">
+      <div class="form-card">
+        <h2>Account details</h2>
+        <form id="profileForm">
+          <div class="form-group">
+            <label for="full_name">Full name</label>
+            <input type="text" id="full_name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" required />
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="saveBtn">Save changes</button>
+          </div>
+          <div class="form-message" id="formMessage"></div>
+        </form>
+      </div>
+
+      <div class="form-card">
+        <h2>Categories</h2>
+        <form id="categoryForm" class="inline-form">
+          <input type="text" id="newCategory" placeholder="New category name" maxlength="60" />
+          <button class="btn btn-primary" type="submit">Add</button>
+        </form>
+        <ul class="category-list" id="categoryList"></ul>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taskora — Organize your work beautifully</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="landing">
+  <header class="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">T</span> Taskora
+      </a>
+      <nav class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="login.html" class="btn btn-ghost">Login</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+    </div>
+  </header>
+
+  <section class="hero container">
+    <div class="hero-text">
+      <h1>Get things done with <span class="accent">Taskora</span>.</h1>
+      <p>A modern, secure, and delightfully simple task manager. Track priorities, deadlines, and progress — all in one dashboard.</p>
+      <div class="hero-cta">
+        <a href="register.html" class="btn btn-primary btn-lg">Create free account</a>
+        <a href="login.html" class="btn btn-outline btn-lg">I already have one</a>
+      </div>
+      <ul class="hero-bullets">
+        <li>✓ JWT-secured API</li>
+        <li>✓ Real-time updates via WebSockets</li>
+        <li>✓ Priorities, categories, deadlines</li>
+      </ul>
+    </div>
+    <div class="hero-card">
+      <div class="hero-card-header">Today's tasks</div>
+      <div class="hero-task priority-high"><span class="dot"></span> Finalize Q4 report</div>
+      <div class="hero-task priority-medium"><span class="dot"></span> Reply to client email</div>
+      <div class="hero-task priority-low done"><span class="dot"></span> Review pull request</div>
+      <div class="hero-stats">
+        <div><strong>25</strong><span>Total</span></div>
+        <div><strong>8</strong><span>Pending</span></div>
+        <div><strong>9</strong><span>Done</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="features" class="container features">
+    <h2>Everything you need to stay on track</h2>
+    <div class="feature-grid">
+      <div class="feature-card"><h3>🔐 Secure Auth</h3><p>JWT authentication with bcrypt password hashing keeps your account safe.</p></div>
+      <div class="feature-card"><h3>📊 Smart Dashboard</h3><p>See totals, pending, in-progress, completed, and overdue at a glance.</p></div>
+      <div class="feature-card"><h3>⚡ Real-Time Sync</h3><p>Updates stream to every open tab via WebSockets — no refresh needed.</p></div>
+      <div class="feature-card"><h3>🗂️ Categories</h3><p>Group tasks into Work, Personal, Study, Project, and more.</p></div>
+      <div class="feature-card"><h3>🎯 Priorities</h3><p>Low, Medium, High, Urgent — visible at a glance with color coding.</p></div>
+      <div class="feature-card"><h3>📱 Responsive</h3><p>Works beautifully on desktop, tablet, and mobile browsers.</p></div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>
+        <div class="brand"><span class="brand-mark">T</span> Taskora</div>
+        <p class="muted">A FastAPI + PostgreSQL task manager demo.</p>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+      </div>
+      <p class="muted">© <span id="year"></span> Taskora. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('navToggle')?.addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('open');
+    });
+  </script>
+</body>
+</html>

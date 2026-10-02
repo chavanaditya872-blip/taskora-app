@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard · Taskora</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body class="app-page">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><span class="brand-mark">T</span> Taskora</div>
+    <nav class="side-nav">
+      <a href="dashboard.html" class="active">📊 Dashboard</a>
+      <a href="task.html">➕ New Task</a>
+      <a href="profile.html">👤 Profile</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-mini">
+        <div class="avatar" id="userAvatar">U</div>
+        <div>
+          <div id="userNameSide" class="user-name">User</div>
+          <div id="userEmailSide" class="muted small">-</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost btn-block" id="logoutBtn">Logout</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <button class="hamburger" id="menuToggle" aria-label="Toggle menu">☰</button>
+      <h1 id="welcomeHeading">Welcome back 👋</h1>
+      <div class="topbar-actions">
+        <a href="task.html" class="btn btn-primary">+ New Task</a>
+      </div>
+    </header>
+
+    <section class="stats-grid" id="statsGrid">
+      <div class="stat-card" data-stat="total"><div class="stat-label">Total Tasks</div><div class="stat-value" id="statTotal">0</div></div>
+      <div class="stat-card" data-stat="pending"><div class="stat-label">Pending</div><div class="stat-value" id="statPending">0</div></div>
+      <div class="stat-card" data-stat="in_progress"><div class="stat-label">In Progress</div><div class="stat-value" id="statInProgress">0</div></div>
+      <div class="stat-card" data-stat="completed"><div class="stat-label">Completed</div><div class="stat-value" id="statCompleted">0</div></div>
+      <div class="stat-card" data-stat="overdue"><div class="stat-label">Overdue</div><div class="stat-value" id="statOverdue">0</div></div>
+    </section>
+
+    <section class="chart-section">
+      <h2>Overview</h2>
+      <div class="chart-bars" id="chartBars"></div>
+    </section>
+
+    <section class="tasks-section">
+      <div class="tasks-header">
+        <h2>Your Tasks</h2>
+        <div class="view-tabs" id="viewTabs">
+          <button data-view="" class="active">All</button>
+          <button data-view="today">Today</button>
+          <button data-view="upcoming">Upcoming</button>
+          <button data-view="pending">Pending</button>
+          <button data-view="completed">Completed</button>
+          <button data-view="overdue">Overdue</button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <input type="search" id="searchInput" placeholder="Search tasks…" />
+        <select id="filterStatus">
+          <option value="">All statuses</option>
+          <option value="todo">To Do</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <select id="filterPriority">
+          <option value="">All priorities</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+          <option value="urgent">Urgent</option>
+        </select>
+        <select id="filterCategory"><option value="">All categories</option></select>
+        <select id="sortBy">
+          <option value="created_at:desc">Newest first</option>
+          <option value="created_at:asc">Oldest first</option>
+          <option value="due_date:asc">Due date ↑</option>
+          <option value="due_date:desc">Due date ↓</option>
+          <option value="priority:desc">Priority (high→low)</option>
+          <option value="title:asc">Title A–Z</option>
+        </select>
+      </div>
+
+      <div id="taskList" class="task-list">
+        <div class="empty-state" id="emptyState">No tasks yet. Click <strong>+ New Task</strong> to get started.</div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Task details modal -->
+  <div class="modal-overlay" id="taskModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modalTitle">Task details</h3>
+        <button class="close-btn" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/shell.js"></script>
+  <script src="js/tasks.js"></script> <!-- Move tasks.js ABOVE dashboard.js -->
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
