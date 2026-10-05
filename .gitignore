@@ -1,29 +1,7 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
+﻿venv/
 .venv/
-venv/
-env/
-.pytest_cache/
-.mypy_cache/
-
-# Environment
+__pycache__/
+*.pyc
 .env
-.env.local
-
-# Database
-*.db
-*.sqlite3
-
-# IDE
-.vscode/
-.idea/
-*.swp
-
-# OS
 .DS_Store
-Thumbs.db
-
-# Logs
 *.log

@@ -1,76 +1,58 @@
-"""Authentication routes."""
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
+﻿from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
 from app.core.database import get_db
-from app.core.security import create_access_token, hash_password, verify_password
-from app.models.user import User
+from app.core.security import create_access_token, get_password_hash, verify_password
+from app.models import User
 from app.routers.deps import get_current_user
-from app.schemas.user import Token, UserCreate, UserLogin, UserOut, UserUpdate
+from app.schemas.all_schemas import Token, UserCreate, UserLogin, UserOut, UserUpdate
 
-router = APIRouter(prefix="/api/auth", tags=["Authentication"])
-
+router = APIRouter()
 
 @router.post("/register", response_model=Token, status_code=status.HTTP_201_CREATED)
-def register(payload: UserCreate, db: Session = Depends(get_db)):
-    """Register a new user and return a JWT."""
-    existing = db.scalar(select(User).where(User.email == payload.email.lower()))
-    if existing:
+def register(user_in: UserCreate, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == user_in.email).first()
+    if user:
         raise HTTPException(status_code=400, detail="Email already registered")
-
-    user = User(
-        full_name=payload.full_name.strip(),
-        email=payload.email.lower(),
-        password_hash=hash_password(payload.password),
+    username = user_in.username or user_in.full_name or user_in.email.split("@")[0]
+    if db.query(User).filter(User.username == username).first():
+        username = f"{username}_{db.query(User).count() + 1}"
+    new_user = User(
+        email=user_in.email,
+        username=username,
+        full_name=user_in.full_name or username,
+        hashed_password=get_password_hash(user_in.password),
+        is_active=True
     )
-    db.add(user)
-    try:
-        db.commit()
-    except IntegrityError:
-        db.rollback()
-        raise HTTPException(status_code=400, detail="Email already registered")
-    db.refresh(user)
-
-    token = create_access_token(user.id)
-    return Token(access_token=token, user=UserOut.model_validate(user))
-
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    token = create_access_token({"sub": new_user.email, "id": new_user.id})
+    return {"access_token": token, "token_type": "bearer", "user": new_user}
 
 @router.post("/login", response_model=Token)
-def login(payload: UserLogin, db: Session = Depends(get_db)):
-    """Authenticate a user and return a JWT."""
-    user = db.scalar(select(User).where(User.email == payload.email.lower()))
-    if not user or not verify_password(payload.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="Invalid email or password")
-    token = create_access_token(user.id)
-    return Token(access_token=token, user=UserOut.model_validate(user))
-
-
-@router.post("/logout")
-def logout(current_user: User = Depends(get_current_user)):
-    """Stateless logout. Client discards the token."""
-    return {"detail": "Logged out successfully"}
-
+def login(login_data: UserLogin, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == login_data.email).first()
+    if not user or not verify_password(login_data.password, user.hashed_password):
+        raise HTTPException(status_code=401, detail="Incorrect email or password")
+    token = create_access_token({"sub": user.email, "id": user.id})
+    return {"access_token": token, "token_type": "bearer", "user": user}
 
 @router.get("/me", response_model=UserOut)
-def me(current_user: User = Depends(get_current_user)):
-    return UserOut.model_validate(current_user)
-
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user
 
 @router.put("/me", response_model=UserOut)
-def update_me(
-    payload: UserUpdate,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db),
-):
-    if payload.email and payload.email.lower() != current_user.email:
-        dup = db.scalar(select(User).where(User.email == payload.email.lower()))
-        if dup:
+def update_me(payload: UserUpdate, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+    if payload.full_name:
+        current_user.full_name = payload.full_name
+    if payload.email and payload.email != current_user.email:
+        if db.query(User).filter(User.email == payload.email).first():
             raise HTTPException(status_code=400, detail="Email already in use")
-        current_user.email = payload.email.lower()
-    if payload.full_name is not None:
-        current_user.full_name = payload.full_name.strip()
+        current_user.email = payload.email
     db.commit()
     db.refresh(current_user)
-    return UserOut.model_validate(current_user)
+    return current_user
+
+@router.post("/logout")
+def logout():
+    return {"status": "ok"}

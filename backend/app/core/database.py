@@ -1,27 +1,16 @@
-"""Database engine, session factory, and declarative base."""
-from typing import Generator
-
+﻿import os
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, Session, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker
 
-from app.core.config import settings
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+psycopg://postgres:Aadi%40123@127.0.0.1:5433/taskora_db")
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,
-    future=True,
-)
+engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
-SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False, future=True)
-
-
-class Base(DeclarativeBase):
-    """Base class for all ORM models."""
-    pass
-
-
-def get_db() -> Generator[Session, None, None]:
-    """FastAPI dependency that yields a database session."""
+def get_db():
     db = SessionLocal()
     try:
         yield db

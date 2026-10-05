@@ -1,4 +1,4 @@
-// js/shell.js
+﻿// js/shell.js
 function initShell() {
   // If you have auth user info stored, populate the sidebar
   const user = Auth && typeof Auth.getUser === 'function' ? Auth.getUser() : null;

@@ -1,4 +1,4 @@
-/* Handles login, register, and shared auth UI for authenticated pages. */
+﻿/* Handles login, register, and shared auth UI for authenticated pages. */
 
 function showFieldError(field, message) {
   const el = document.querySelector(`[data-error-for="${field}"]`);

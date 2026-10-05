@@ -1,4 +1,4 @@
-/* Task HTML Card Generator */
+﻿/* Task HTML Card Generator */
 function taskCardHTML(task) {
   const isDone = task.status === 'completed';
   const overdue = isOverdue(task.due_date, task.status);

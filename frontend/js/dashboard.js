@@ -1,4 +1,4 @@
-/* Dashboard: stats, chart, task list, filters, and WebSocket sync. */
+﻿/* Dashboard: stats, chart, task list, filters, and WebSocket sync. */
 const Dashboard = (() => {
   const state = {
     tasks: [],

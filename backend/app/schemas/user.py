@@ -1,36 +1,30 @@
-"""User Pydantic schemas."""
-from datetime import datetime
-
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
-
+﻿from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, EmailStr
 
 class UserBase(BaseModel):
-    full_name: str = Field(min_length=2, max_length=120)
     email: EmailStr
+    username: str
 
-
-class UserCreate(UserBase):
-    password: str = Field(min_length=8, max_length=128)
-
+class UserCreate(BaseModel):
+    email: EmailStr
+    username: Optional[str] = None
+    password: str
+    full_name: Optional[str] = None
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-
 class UserOut(UserBase):
-    model_config = ConfigDict(from_attributes=True)
     id: int
+    is_active: bool
     created_at: datetime
-    updated_at: datetime
 
-
-class UserUpdate(BaseModel):
-    full_name: str | None = Field(default=None, min_length=2, max_length=120)
-    email: EmailStr | None = None
-
+    class Config:
+        from_attributes = True
 
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
-    user: UserOut
+    user: Optional[UserOut] = None
